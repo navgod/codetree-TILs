@@ -21,8 +21,7 @@ def bfs():
                 visited[ny][nx] = 1
                 step[ny][nx] = step[y][x] +1
                 q.append((nx,ny))
-                if ny == n-1 and nx == n-1:
-                    return
+                
 
 q.append((c1-1,r1-1))
 visited[c1-1][r1-1] = 1
