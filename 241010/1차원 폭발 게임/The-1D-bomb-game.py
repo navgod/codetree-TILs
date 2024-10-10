@@ -38,8 +38,7 @@ while last != bomb:
     last = bomb
     switch()
     explode()
+print(len(bomb))
 if bomb:
     for i in bomb:
         print(i)
-else:
-    print(0)
