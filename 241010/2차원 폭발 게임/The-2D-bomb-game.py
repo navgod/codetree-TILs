@@ -1,3 +1,5 @@
+import copy
+
 n,m,k = map(int , input().split())
 grid = [list(map(int , input().split())) for _ in range(n)]
 temp = [[0]*n for _ in range(n)]
@@ -21,26 +23,32 @@ def rotate():
         for j in range(n):
             temp[i][j] = grid[n -1 - j][i]
     copy_and_reset()
+    gravity()
 
 def explode():
-    for x in range(n):
-        keep_bomb = 0
-        keep = []
-        for y in range(n):
-            temp[y][x] = grid[y][x]
-            if keep_bomb and keep_bomb == grid[y][x]:
-                keep.append(y)
-            else:
-                if len(keep)>=m:
-                    for i in keep:
-                        temp[i][x] = 0
-                keep_bomb = grid[y][x]
-                if keep_bomb:
-                    keep = [y]
-        if len(keep)>=m:
-            for i in keep:
-                temp[i][x] = 0
-    copy_and_reset()
+    last = ''
+    while last != grid:
+        last = copy.deepcopy(grid)
+        for x in range(n):
+            keep_bomb = 0
+            keep = []
+            for y in range(n):
+                temp[y][x] = grid[y][x]
+                if keep_bomb and keep_bomb == grid[y][x]:
+                    keep.append(y)
+                else:
+                    if len(keep)>=m:
+                        for i in keep:
+                            temp[i][x] = 0
+                    keep_bomb = grid[y][x]
+                    if keep_bomb:
+                        keep = [y]
+            if len(keep)>=m:
+                for i in keep:
+                    temp[i][x] = 0
+        copy_and_reset()
+        gravity()
+
 
 def counting_bomb():
     cnt = 0
@@ -59,13 +67,7 @@ def printing():
 
 for _ in range(k):
     explode()
-    gravity()
-    last = ''
-    while last != grid:
-        last = grid
-        explode()
-        gravity()
     rotate()
-    gravity()
+
 explode()
 counting_bomb()
