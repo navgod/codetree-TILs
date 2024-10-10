@@ -15,26 +15,27 @@ target = copy.deepcopy(now)
 
 def check():
     temp = [i for i in range(1,n+1)]
-    for a in selected_line:
+    for a, b in selected_lines:
         temp[a-1], temp[a] = temp[a], temp[a-1]
     return temp == target
 
-ans = m+1
+ans = m
 
-def min_cnt(cnt,idx):
+def min_cnt(cnt):
     global ans
-    if cnt == k:
+
+    if cnt == m:
         if check():
-            ans = min(ans ,cnt)
+            ans = min(ans ,len(selected_lines))
         return 
 
-    for i in range(1,n):
-        selected_line.append(i)
-        min_cnt(cnt+1,i+1)
-        selected_line.pop()
+    selected_lines.append(lines[cnt])
+    min_cnt(cnt +1)
+    selected_lines.pop()
+    min_cnt(cnt + 1)
 
+selected_lines= []
 
-for k in range(m+1):
-    selected_line = []
-    min_cnt(0,0)
+min_cnt(0)
+
 print(ans)
