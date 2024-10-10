@@ -8,7 +8,7 @@ ans = 0
 
 def is_overlap(s,e):
     for x1, x2 in selected_lines:
-        if s <= x1 <= e or s <= x2 <= e:
+        if s <= x1 <= e or s <= x2 <= e or (x1<= s and e <=x2):
             return True
     return False
 
