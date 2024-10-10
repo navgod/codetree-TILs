@@ -60,14 +60,8 @@ def printing():
 for _ in range(k):
     explode()
     gravity()
-    rotate()
-    gravity()
-last = ''
-while last != grid:
-    last = grid
     explode()
-    gravity()
     rotate()
     gravity()
-    
+explode()
 counting_bomb()
