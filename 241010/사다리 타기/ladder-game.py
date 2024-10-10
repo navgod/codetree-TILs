@@ -32,7 +32,7 @@ def min_cnt(cnt,maxi):
         return 
     for i in range(1,n):
         selected_line.append(i)
-        min_cnt(cnt+1)
+        min_cnt(cnt+1,maxi)
         selected_line.pop()
 maxi = 1
 while ans == m+1:
