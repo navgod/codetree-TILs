@@ -35,34 +35,15 @@ def explode(x,y):
 
 def counting():
     cnt = 0
+    dxs , dys = [1,0] , [0,1]
     for x in range(n):
-        keep_bomb = 0
-        keep = []
         for y in range(n):
-            if keep_bomb and keep_bomb == grid[y][x]:
-                keep.append(y)
-            else:
-                if len(keep) == 2:
-                    cnt +=1
-                keep_bomb = grid[y][x]
-                if keep_bomb:
-                    keep = [y]
-        if keep and len(keep) == 2:
-            cnt +=1
-    for y in range(n):
-        keep_bomb = 0
-        keep = []
-        for x in range(n):
-            if keep_bomb and keep_bomb == grid[y][x]:
-                keep.append(y)
-            else:
-                if len(keep) == 2:
-                    cnt +=1
-                keep_bomb = grid[y][x]
-                if keep_bomb:
-                    keep = [y]
-        if keep and len(keep) == 2:
-            cnt +=1
+            if grid[y][x]:
+                for dx , dy in zip(dxs, dys):
+                    nx, ny = x +dx , y +dy
+                    if is_range(nx,ny)and grid[y][x] == grid[ny][nx]:
+                        cnt+=1
+                    
     return cnt
 
 
