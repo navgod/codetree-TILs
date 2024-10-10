@@ -4,7 +4,7 @@ target = input()
 
 selected = []
 
-ans = 0
+ans = -sys.maxsize
 
 def calc():
     val = selected[0]
