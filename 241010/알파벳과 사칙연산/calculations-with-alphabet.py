@@ -7,32 +7,26 @@ selected = []
 ans = -sys.maxsize
 
 def calc():
-    val = selected[0]
+    val = selected[ord(target[0])-97]
     for i in range(1,len(target),2):
-        if selected[i] == '*':
-            val *= selected[i+1]
-        elif selected[i] == '-':
-            val -= selected[i+1]
-        elif selected[i] == '+':
-            val += selected[i+1]
+        if target[i] == '*':
+            val *= selected[ord(target[i+1])-97]
+        elif target[i] == '-':
+            val -= selected[ord(target[i+1])-97]
+        elif target[i] == '+':
+            val += selected[ord(target[i+1])-97]
     return val
 
-def simul(idx):
+def simul(cnt):
     global ans
 
-    if idx == len(target):
+    if cnt == 6:
         ans = max(ans,calc())
         return
-
-    if idx %2 ==0:
-        for i in range(1,5):
-            selected.append(i)
-            simul(idx+1)
-            selected.pop()
-    else:
-        selected.append(target[idx])
-        simul(idx+1)
+    for i in range(1,5):
+        selected.append(i)
+        simul(cnt+1)
         selected.pop()
-
+    
 simul(0)
 print(ans)
