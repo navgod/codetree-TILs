@@ -13,8 +13,6 @@ for a, b in sorted_lines:
 
 target = copy.deepcopy(now)
 
-selected_line = []
-
 def check():
     temp = [i for i in range(1,n+1)]
     for a in selected_line:
@@ -23,22 +21,20 @@ def check():
 
 ans = m+1
 
-def min_cnt(cnt,maxi):
+def min_cnt(cnt,idx):
     global ans
-    if check():
-        ans = min(ans ,cnt)
+    if cnt == k:
+        if check():
+            ans = min(ans ,cnt)
         return 
-    if cnt > maxi:
-        return 
+
     for i in range(1,n):
         selected_line.append(i)
-        min_cnt(cnt+1,maxi)
+        min_cnt(cnt+1,i+1)
         selected_line.pop()
-maxi = 1
-while ans == m+1:
-    if maxi >= m:
-        ans = m
-        break
-    min_cnt(0,maxi)
-    maxi +=1
+
+
+for k in range(m+1):
+    selected_line = []
+    min_cnt(0,0)
 print(ans)
