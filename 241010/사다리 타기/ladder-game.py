@@ -20,18 +20,25 @@ def check():
     for a in selected_line:
         temp[a-1], temp[a] = temp[a], temp[a-1]
     return temp == target
+
 ans = m+1
-def min_cnt(cnt):
+
+def min_cnt(cnt,maxi):
     global ans
     if check():
         ans = min(ans ,cnt)
         return 
-    if cnt >=m:
-        ans = min(ans ,m)
+    if cnt >maxi:
         return 
+    if maxi > m:
+        ans = m
+        return
     for i in range(1,n):
         selected_line.append(i)
         min_cnt(cnt+1)
         selected_line.pop()
-min_cnt(0)
+maxi = 1
+while ans == m+1:
+    min_cnt(0,maxi)
+    maxi +=1
 print(ans)
