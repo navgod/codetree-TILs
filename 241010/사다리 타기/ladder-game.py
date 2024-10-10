@@ -28,17 +28,17 @@ def min_cnt(cnt,maxi):
     if check():
         ans = min(ans ,cnt)
         return 
-    if cnt >maxi:
+    if cnt > maxi:
         return 
-    if maxi > m:
-        ans = m
-        return
     for i in range(1,n):
         selected_line.append(i)
-        min_cnt(cnt+1,maxi)
+        min_cnt(cnt+1)
         selected_line.pop()
 maxi = 1
 while ans == m+1:
+    if maxi >= m:
+        ans = m
+        break
     min_cnt(0,maxi)
     maxi +=1
 print(ans)
