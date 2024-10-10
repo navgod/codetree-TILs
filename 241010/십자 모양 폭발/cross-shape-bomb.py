@@ -12,16 +12,20 @@ for dx,dy in zip(dxs,dys):
         nx, ny = x+dx*i , y+dy*i
         if is_range(nx,ny):
             area[ny][nx] = 0
+
 area[y][x] =0
+temp = [[0]*n for _ in range(n)]
 
 def gravity():
     for col in range(n):
-        for row in range(n-1,0,-1):
-            if area[row][col] ==0:
-                area[row][col] = area[row-1][col]
-                area[row-1][col] =0
-
+        temp_row = n-1
+        for row in range(n-1,-1,-1):
+            if area[row][col] !=0:
+                temp[temp_row][col] = area[row][col]
+                temp_row -=1
 gravity()
+
+area = temp
 
 for row in area:
     for col in row:
