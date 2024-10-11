@@ -35,6 +35,10 @@ while tof:
             if not right_block(x+dxs[(dir-1)%4],y+dys[(dir-1)%4]):
                 dir = (dir -1)%4
         else:
+            if is_range(nx,ny) and visited[ny][nx]:
+                tof = False
+                time = -1
+                break
             first = dir
             while not can_go(x+dxs[dir],y+dys[dir]):
                 if not is_range(x+dxs[dir],y+dys[dir]):
