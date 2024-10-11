@@ -15,7 +15,6 @@ def move(x,y):
     global ans
 
     ans = max(ans, len(move_list))
-
     dir = direction[y][x]
 
     dx , dy = dxs[dir] , dys[dir]
@@ -29,7 +28,6 @@ def move(x,y):
         x,y = nx ,ny
         nx, ny = x +dx, y+dy
 
-move_list.append((x,y))
 move(x,y)
 
 print(ans)
