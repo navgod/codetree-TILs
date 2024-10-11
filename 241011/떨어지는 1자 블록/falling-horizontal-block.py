@@ -8,6 +8,8 @@ def fall_down():
     global now_row
     stop = False
     next_row = now_row +1
+    if next_row >= n:
+        break
     for i in range(k,k+m):
         if grid[next_row][i] !=0:
             stop = True
