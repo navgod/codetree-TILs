@@ -11,7 +11,7 @@ def is_range(x,y):
     return 0<=x<n and 0<=y<n
 
 def can_go(x,y):
-    return is_range(x,y) and grid[y][x]== '.'
+    return is_range(x,y) and grid[y][x]== '.' and not visited[y][x]
 
 def right_block(x,y):
     return grid[y][x] == '#'
@@ -21,7 +21,7 @@ dxs ,dys = [1,0,-1,0] , [0,-1,0,1]
 dir = 0
 
 tof = True
-
+visited = [[0]*n for _ in range(n)]
 while tof:
     time +=1
     nx, ny = x + dxs[dir] , y + dys[dir]
