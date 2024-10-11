@@ -22,6 +22,7 @@ dir = 0
 
 tof = True
 visited = [[0]*n for _ in range(n)]
+visited[y][x] = 1
 while tof:
     time +=1
     nx, ny = x + dxs[dir] , y + dys[dir]
@@ -30,6 +31,7 @@ while tof:
     else:
         if can_go(nx,ny):
             x, y = nx , ny
+            visited[y][x] = 1
             if not right_block(x+dxs[(dir-1)%4],y+dys[(dir-1)%4]):
                 dir = (dir -1)%4
         else:
@@ -45,6 +47,7 @@ while tof:
                     break
             if can_go(x+dxs[dir],y+dys[dir]):
                 x, y = x+dxs[dir], y+dys[dir]
+                visited[y][x] = 1
 
 
 print(time)
