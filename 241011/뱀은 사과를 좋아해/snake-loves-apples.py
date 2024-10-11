@@ -51,13 +51,14 @@ def game():
     for dir , dura in command:
         for i in range(1,dura+1):
             nx, ny = x+dxs[dir] , y+dys[dir]
+            if is_range(nx,ny):
+                if not eat_apple(nx,ny):
+                    last_x, last_y = snake.pop()
+                    grid[last_y][last_x] = 0
             if not can_go(nx,ny): # game over
                 t+=1
                 return
             snake.appendleft((nx,ny))
-            if not eat_apple(nx,ny):
-                last_x, last_y = snake.pop()
-                grid[last_y][last_x] = 0
             grid[ny][nx] = 2
             x,y = nx,ny
             t+=1
