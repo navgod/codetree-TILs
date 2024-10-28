@@ -55,7 +55,6 @@ for _ in range(t):
     for bead in beads:
         new_bead = move(bead)
         new_beads.append(new_bead)
-        r,c,d,v = new_bead
     beads = new_beads
     beads = check()
 
