@@ -6,22 +6,31 @@ def move():
 
 def check(t):
     global last
-    crash_idx = dict()
+    unique_coord = set()
+    duplicated_coord = set()
     new_beads = []
+    crash_idx = dict()
     for idx,bead in enumerate(beads):
         x,y,w,d = bead
-        if (x,y) in crash_idx:
-            crash_idx[(x,y)].append(idx)
+        if (x,y) in unique_coord:
+            duplicated_coord.add((x,y))
         else:
-            crash_idx[(x,y)] = [idx]
+            unique_coord.add((x,y))
+    for idx, bead in enumerate(beads):
+        x, y, w, d = bead
+        if (x, y) in duplicated_coord:
+            if (x, y) in crash_idx:
+                crash_idx[(x, y)].append(idx)
+            else:
+                crash_idx[(x, y)] = [idx]
+        else:
+            new_beads.append(beads[idx])
     for key, val in crash_idx.items():
-        if len(val)>1:
-            target = [(beads[idx][2],idx) for idx in val]
-            winner = sorted(target, key= lambda x: (x[0],x[1]), reverse = True)[0]
-            new_beads.append(beads[winner[1]])
-            last = t
-        else:
-            new_beads.append(beads[val[0]])
+        target = [(beads[idx][2], idx) for idx in val]
+        winner = sorted(target, key=lambda x: (x[0], x[1]), reverse=True)[0]
+        new_beads.append(beads[winner[1]])  # 생존자만 추가
+        last = t
+
     return new_beads
 
 T = int(input())
