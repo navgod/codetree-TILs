@@ -1,14 +1,17 @@
+from collections import deque
+
 def move():
-    for idx, bead in enumerate(beads):
+    for _ in range(len(beads)):
+        bead = beads.popleft()
         x,y,w,d = bead
-        dx, dy = dxs[d], dys[d]
-        beads[idx] = [x+dx*0.5,y+dy*0.5,w,d]
+        dx,dy = dxs[d], dys[d]
+        beads.append([x+dx*0.5,y+dy*0.5,w,d])
 
 def check(t):
     global last
     unique_coord = set()
     duplicated_coord = set()
-    new_beads = []
+    new_beads = deque()
     crash_idx = dict()
     for idx,bead in enumerate(beads):
         x,y,w,d = bead
@@ -28,7 +31,7 @@ def check(t):
     for key, val in crash_idx.items():
         target = [(beads[idx][2], idx) for idx in val]
         winner = sorted(target, key=lambda x: (x[0], x[1]), reverse=True)[0]
-        new_beads.append(beads[winner[1]])  # 생존자만 추가
+        new_beads.append(beads[winner[1]])
         last = t
 
     return new_beads
@@ -47,7 +50,10 @@ dxs , dys = [0,0,1,-1] , [1,-1,0,0]
 for _ in range(T):
     n= int(input())
     # x y w d
-    beads = [ [int(x[0]), int(x[1]), int(x[2]), dir_map[x[3]]]  for x in (input().split() for _ in range(n))]
+    beads = deque()
+    for _ in range(n):
+        x,y,w,d = input().split()
+        beads.append([int(x),int(y),int(w),dir_map[d]])
     last = -1
     for time in range(1,4004):
         move()
