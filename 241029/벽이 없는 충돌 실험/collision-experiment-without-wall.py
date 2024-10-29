@@ -39,7 +39,7 @@ for _ in range(T):
     n= int(input())
     # x y w d
     beads = [ [int(x[0]), int(x[1]), int(x[2]), dir_map[x[3]]]  for x in (input().split() for _ in range(n))]
-    last = 0
+    last = -1
     for time in range(1,4004):
         new_beads = []
         for bead in beads:
