@@ -1,8 +1,8 @@
-def move(bead):
-    x,y,w,d = bead
-    dx, dy = dxs[d]*0.5, dys[d]*0.5
-    new_bead = [x+dx,y+dy,w,d]
-    return new_bead
+def move():
+    for idx, bead in enumerate(beads):
+        x,y,w,d = bead
+        dx, dy = dxs[d], dys[d]
+        beads[idx] = [x+dx*0.5,y+dy*0.5,w,d]
 
 def check(t):
     global last
@@ -41,10 +41,7 @@ for _ in range(T):
     beads = [ [int(x[0]), int(x[1]), int(x[2]), dir_map[x[3]]]  for x in (input().split() for _ in range(n))]
     last = -1
     for time in range(1,4004):
-        new_beads = []
-        for bead in beads:
-            new_beads.append(move(bead))
-        beads = new_beads
+        move()
         new_beads = check(time)
         beads = new_beads
     print(last)
