@@ -10,7 +10,7 @@ def move():
             nx,ny = x+dx,y+dy
         else:
             nx,ny = x,y
-            d = (d+2)%2
+            d = (d+2)%4
         new_beads.append([nx,ny,d,w,idx])
 
     return new_beads
@@ -61,6 +61,7 @@ for idx in range(m):
 for _ in range(t):
     beads = move()
     beads = check()
+
 weights = sorted(beads, key = lambda x: x[3])
 
 print(len(beads),weights[-1][3])
