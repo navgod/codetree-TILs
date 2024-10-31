@@ -14,10 +14,18 @@ def dp(x,y,cnt):
             dp(nx,ny,cnt+1)
     
 n = int(input())
-grid = [list(map(int,input().split())) for _ in range(n)]
+grid = []
+
+mini = 1000000000
+for _ in range(n):
+    tmp = list(map(int,input().split()))
+    mini = min(min(tmp),mini)
+    grid.append(tmp)
+
 
 for row in range(n):
     for col in range(n):
-        dp(row,col,1)
+        if grid[row][col] == mini:
+            dp(row,col,1)
 
 print(maxi)
