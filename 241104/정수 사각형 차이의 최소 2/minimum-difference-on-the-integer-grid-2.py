@@ -26,9 +26,10 @@ for row in range(1,n):
         left_min = dp[row][col-1][1]
         lefts = [now,left_max,left_min]
 
-        if (max(ups)-min(ups)) > (max(lefts)-min(lefts)):
+        if (max(ups)-min(ups)) >= (max(lefts)-min(lefts)):
             dp[row][col][0],dp[row][col][1]  = max(lefts) , min(lefts)
         else:
             dp[row][col][0],dp[row][col][1]  = max(ups) , min(ups)
+
 
 print(dp[n-1][n-1][0]-dp[n-1][n-1][1])
