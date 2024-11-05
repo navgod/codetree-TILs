@@ -15,4 +15,7 @@ for i in range(m+1):
             if dp[i-coin]:
                 dp[i] = min(dp[i],dp[i-coin]+1)
 
-print(dp[m])
+if dp[m] == 10001:
+    print(-1)
+else:
+    print(dp[m])
