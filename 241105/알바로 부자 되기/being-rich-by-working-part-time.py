@@ -7,18 +7,19 @@ dp_down = [0]*n
 dp = [0]*n
 for i in range(n):
     s, e, p = part_timer[i]
-    dp_up[i] += p
     for j in range(i):
         j_s, j_e , j_p = part_timer[j]
-        if j_e <= s:
+        if j_e < s:
             dp_up[i] = max(dp_up[i],dp_up[j])
+    dp_up[i] += p
+
 for i in range(n-1,-1,-1):
     s, e, p = part_timer[i]
-    dp_down[i] += p
     for j in range(i+1,n):
         j_s, j_e , j_p = part_timer[j]
-        if j_s >= e:
+        if j_s > e:
             dp_down[i] = max(dp_down[i],dp_down[j])
+    dp_down[i] += p
     
 for i in range(n):
     dp[i] = dp_up[i] + dp_down[i] - part_timer[i][2]
