@@ -1,78 +1,87 @@
-import sys
-import copy
-sys.setrecursionlimit(10000)
-
 n = int(input())
-board = [list(map(int, input().split())) for _ in range(n)]
-answer = 0
+board = [list(map(int,input().split())) for _ in range(n)]
 
-def move(board, dir):
-    new_board = [row[:] for row in board] # 복사
-    if dir == 0:  # up
-        for j in range(n):
-            merged = [False]*n
-            for i in range(1, n):
-                if new_board[i][j]:
-                    r = i
-                    while r > 0 and new_board[r-1][j] == 0:
-                        new_board[r-1][j], new_board[r][j] = new_board[r][j], 0
-                        r -= 1
-                    if r > 0 and new_board[r-1][j] == new_board[r][j] and not merged[r-1]:
-                        new_board[r-1][j] *= 2
-                        new_board[r][j] = 0
+Max_Moves = 5
+ans = -1
+
+def move_board(board, dir):
+
+    new_board = [row[:] for row in board]
+
+    if dir == 0: # 위로
+        for col in range(n):
+            merged = [False for _ in range(n)]
+            for row in range(1,n):
+                if new_board[row][col]:
+                    r= row
+                    while 0 < r and new_board[r-1][col] ==0:
+                        new_board[r-1][col] , new_board[r][col] = new_board[r][col] , new_board[r-1][col]
+                        r -=1
+                    if r !=0 and not merged[r-1] and new_board[r][col] == new_board[r-1][col]:
+                        new_board[r-1][col] = new_board[r][col] *2
+                        new_board[r][col] = 0
                         merged[r-1] = True
-    elif dir == 1:  # down
-        for j in range(n):
-            merged = [False]*n
-            for i in range(n-2, -1, -1):
-                if new_board[i][j]:
-                    r = i
-                    while r < n-1 and new_board[r+1][j] == 0:
-                        new_board[r+1][j], new_board[r][j] = new_board[r][j], 0
-                        r += 1
-                    if r < n-1 and new_board[r+1][j] == new_board[r][j] and not merged[r+1]:
-                        new_board[r+1][j] *= 2
-                        new_board[r][j] = 0
+    elif dir == 1: # 아래로
+        for col in range(n):
+            merged = [False for _ in range(n)]
+            for row in range(n-2,-1,-1):
+                if new_board[row][col]:
+                    r = row
+                    while r < n -1 and new_board[r+1][col] ==0:
+                        new_board[r+1][col] , new_board[r][col] = new_board[r][col] , new_board[r+1][col]
+                        r +=1
+                    if r != n-1 and not merged[r+1] and new_board[r][col] == new_board[r+1][col]:
+                        new_board[r+1][col] = new_board[r][col] *2
+                        new_board[r][col] = 0
                         merged[r+1] = True
-    elif dir == 2:  # left
-        for i in range(n):
-            merged = [False]*n
-            for j in range(1, n):
-                if new_board[i][j]:
-                    c = j
-                    while c > 0 and new_board[i][c-1] == 0:
-                        new_board[i][c-1], new_board[i][c] = new_board[i][c], 0
+    elif dir == 2: # 오른쪽
+        for row in range(n):
+                merged = [False for _ in range(n)]
+                for col in range(n-2,-1,-1):
+                    if new_board[row][col]:
+                        c = col
+                        while c < n-1 and new_board[row][c+1] ==0:
+                            new_board[row][c+1] , new_board[row][c] = new_board[row][c] , new_board[row][c+1]
+                            c += 1
+                        if c !=n-1 and not merged[c+1] and new_board[row][c] == new_board[row][c+1]:
+                            new_board[row][c+1] = new_board[row][c] *2
+                            new_board[row][c] = 0
+                            merged[c+1] = True
+    else: # 왼쪽
+        for row in range(n):
+            merged = [False for _ in range(n)]
+            for col in range(1,n):
+                if new_board[row][col]:
+                    c = col
+                    while 0 < c  and new_board[row][c-1] ==0:
+                        new_board[row][c-1] , new_board[row][c] = new_board[row][c] , new_board[row][c-1]
                         c -= 1
-                    if c > 0 and new_board[i][c-1] == new_board[i][c] and not merged[c-1]:
-                        new_board[i][c-1] *= 2
-                        new_board[i][c] = 0
+                    if c != 0 and not merged[c-1] and new_board[row][c] == new_board[row][c-1]:
+                        new_board[row][c-1] = new_board[row][c] *2
+                        new_board[row][c] = 0
                         merged[c-1] = True
-    else:  # right
-        for i in range(n):
-            merged = [False]*n
-            for j in range(n-2, -1, -1):
-                if new_board[i][j]:
-                    c = j
-                    while c < n-1 and new_board[i][c+1] == 0:
-                        new_board[i][c+1], new_board[i][c] = new_board[i][c], 0
-                        c += 1
-                    if c < n-1 and new_board[i][c+1] == new_board[i][c] and not merged[c+1]:
-                        new_board[i][c+1] *= 2
-                        new_board[i][c] = 0
-                        merged[c+1] = True
+
     return new_board
 
 def get_max(board):
-    return max(max(row) for row in board)
+    return max(
+        [
+            board[i][j]
+            for i in range(n)
+            for j in range(n)
+        ]
+    )
 
-def dfs(board, count):
-    global answer
-    if count == 5:
-        answer = max(answer, get_max(board))
+def dfs(board, moves):
+    global ans
+
+    if moves == Max_Moves:
+        ans = max(ans, get_max(board))
         return
-    for dir in range(4):
-        next_board = move(board, dir)
-        dfs(next_board, count+1)
 
-dfs(board, 0)
-print(answer)
+    for dir in range(4):
+        new_board = move_board(board, dir)
+        dfs(new_board, moves +1)
+
+dfs(board,0)
+print(ans)
