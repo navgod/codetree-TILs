@@ -1,67 +1,53 @@
-from collections import deque
+from copy import deepcopy
 
-n,m = map(int, input().split())
-board = [list(map(int,input().split())) for _ in range(n)]
+# 방향: 북, 동, 남, 서 (문제 세팅에 따라 달라질 수 있음)
+dirs = [(-1,0), (0,1), (1,0), (0,-1)] 
 
-north, east, south, west = (-1,0) , (0,1) , (1,0) , (0,-1)
-
-player = []
-
-
-min_area = float('inf')
-dir_queue = deque()
-
-directions = [
-    [[north],[west],[south],[west]],
-    [[west,east],[north,south]],
-    [[north,east],[west,north],[south,west],[east,south]],
-    [[west,north,east],[south,west,north],[east,south,west],[north,east,south]],
-    [[north,east,west,south]]
+# 각 cctv별 방향 조합 정의 (문제에서 주어진대로 직접 하드코딩)
+cctv_dirs = [
+    [],  # 0번 없음
+    [[0], [1], [2], [3]],                           # 1번
+    [[0,2], [1,3]],                                 # 2번
+    [[0,1], [1,2], [2,3], [3,0]],                   # 3번
+    [[0,1,2], [1,2,3], [2,3,0], [3,0,1]],           # 4번
+    [[0,1,2,3]],                                    # 5번
 ]
 
+n, m = map(int, input().split())
+board = [list(map(int, input().split())) for _ in range(n)]
+
+cctvs = []
 for i in range(n):
     for j in range(m):
-        if 0 < board[i][j] < 6:
-            player.append((i,j,len(directions[board[i][j]-1])))
-        
-num_player = len(player)
-def is_range(r,c):
-    return 0<= r < n and 0<= c < m
+        if 1 <= board[i][j] <= 5:
+            cctvs.append((i, j, board[i][j]))
 
-def cal_area(board):
-    visited = [[False for _ in range(m)] for _ in range(n)]
-    queue = deque()
+result = n * m
 
-    for idx, (i,j, _) in enumerate(player):
-        for dr , dc in dir_queue[idx]:
-            queue.append((i,j,dr,dc))
-    while queue:
-        r,c,dr,dc = queue.popleft()
-        while is_range(r+dr,c+dc) and board[r+dr][c+dc] !=6:
-            r , c = r +dr , c +dc
-            visited[r][c] = True
+def fill(tmp, r, c, directions):
+    for d in directions:
+        nr, nc = r, c
+        while True:
+            nr += dirs[d][0]
+            nc += dirs[d][1]
+            if not (0 <= nr < n and 0 <= nc < m):
+                break
+            if tmp[nr][nc] == 6:   # 벽 만나면 중단
+                break
+            if tmp[nr][nc] == 0:   # 감시할 수 있으면 표시
+                tmp[nr][nc] = '#'
 
-    return sum([
-        1
-         for i in range(n)
-         for j in range(m)
-         if not visited[i][j] and board[i][j] == 0
-    ])
-
-
-## 말이 하나도 없는 경우는 없다고 가정
-
-def dfs(depth):
-    if depth == num_player:
-        global min_area
-        area = cal_area(board)
-        min_area = min(min_area,area)
+def dfs(depth, tmp):
+    global result
+    if depth == len(cctvs):
+        cnt = sum(row.count(0) for row in tmp)
+        result = min(result, cnt)
         return
-    now_player = player[depth]
-    for i in range(now_player[2]):
-        dir_queue.append(directions[board[now_player[0]][now_player[1]]-1][i]) #방향들일수도 방향 하나 일수도
-        dfs(depth+1)
-        dir_queue.pop()
+    x, y, cctv_type = cctvs[depth]
+    for dirs_case in cctv_dirs[cctv_type]:
+        nxt = deepcopy(tmp)
+        fill(nxt, x, y, dirs_case)
+        dfs(depth+1, nxt)
 
-dfs(0)
-print(min_area)
+dfs(0, board)
+print(result)
